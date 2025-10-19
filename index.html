@@ -82,13 +82,12 @@
   <p>Bolsa de empleo gastronómico y asesorías en Medellín</p>
 </header>
 
-<section>
-  <h2>📢 Publicar una oferta</h2>
-  <p>Negocios y restaurantes pueden publicar sus vacantes aquí:</p>
-  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSesW7vS0QuemJZLcSec3ABossdyQFDPqNRqUaR7Hm5bTWcLgQ/viewform?embedded=true" width="100%" height="800">Cargando…</iframe>
-</section><section style="margin-top: 40px;">
-  <h2 style="color:#d35400;">🔥 Empleos destacados</h2>
-  <p style="font-size:16px;">Estas son las vacantes más recientes o urgentes en gastronomía. Haz clic en el enlace de WhatsApp para postularte directamente:</p>
+<section><section id="empleos-destacados" style="margin: 40px 0;">
+  <h2 style="color:#d35400; font-size:1.6em;">🔥 Empleos destacados</h2>
+  <p style="font-size:15px; margin-bottom:20px;">Vacantes recientes en gastronomía. Postúlate fácilmente por WhatsApp:</p>
+  <div id="tarjetas-empleo" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px;"></div>
+</section>
+  
 
   <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTwBICxSFJjS-8qvBMGRXCq7oGKLH2lYtBOR1iKHjxupqlwhTyg2QUK_7ajI_g5XRdre131o7hn36HJ/pubhtml?widget=true&amp;headers=false" 
           width="100%" height="600" style="border:2px solid #d35400; border-radius:12px; background-color:#fff;"></iframe>
@@ -132,6 +131,47 @@
 </footer>
 
 <a href="https://wa.me/573184763464" class="whatsapp-button">💬 Chatea con La Temporal Medellín</a>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Tabletop.js/1.5.1/tabletop.min.js"></script>
+<script>
+  function iconoCargo(cargo) {
+    if (cargo.toLowerCase().includes("cocinero")) return "🍳";
+    if (cargo.toLowerCase().includes("auxiliar")) return "🥗";
+    if (cargo.toLowerCase().includes("mesero")) return "🍽️";
+    return "👨‍🍳";
+  }
 
+  function mostrarEmpleos(data) {
+    const contenedor = document.getElementById("tarjetas-empleo");
+    data.forEach(row => {
+      const tarjeta = document.createElement("div");
+      tarjeta.style = `
+        background:#fff; padding:16px; border-radius:10px;
+        box-shadow:0 2px 6px rgba(0,0,0,0.1); font-size:14px;
+        display:flex; flex-direction:column; justify-content:space-between;
+      `;
+
+      tarjeta.innerHTML = `
+        <h3 style="margin:0 0 10px;">${iconoCargo(row.Cargo)} ${row.Cargo}</h3>
+        <p style="margin:0 0 6px;"><strong>Zona:</strong> ${row.Zona}</p>
+        <p style="margin:0 0 6px;"><strong>Jornada:</strong> ${row.Jornada}</p>
+        <p style="margin:0 0 6px;"><strong>Salario:</strong> ${row.Salario}</p>
+        <p style="margin:0 0 12px;"><strong>Requisitos:</strong> ${row.Requisitos}</p>
+        <a href="${row['Enlace WhatsApp']}" 
+           style="align-self:flex-start; background:#25D366; color:white; padding:8px 12px; border-radius:6px; text-decoration:none; font-weight:bold;">
+           📲 Postular
+        </a>
+      `;
+      contenedor.appendChild(tarjeta);
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    Tabletop.init({
+      key: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwBICxSFJjS-8qvBMGRXCq7oGKLH2lYtBOR1iKHjxupqlwhTyg2QUK_7ajI_g5XRdre131o7hn36HJ/pubhtml',
+      simpleSheet: true,
+      callback: mostrarEmpleos
+    });
+  });
+</script>
 </body>
 </html>
